@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BookCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Alegreya SC' rel='stylesheet'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">    
+    </head>
+<body class="container" style="background-image: url('{{ url_for('static', filename='index.jpg')}}'); background-repeat: no-repeat; background-size: cover; font-family: 'Alegreya SC'; font-weight: bold">
+    <br><div class="row"><div class="col-md-3">name: {{name}}</div><div class="col-md-3"></div><div class="col-md-3">phone: {{phone}}</div></div><br>
+    <div class="text-center">Thanks for shopping!</div><br>
+    <div class="text-center">Items in your cart</div>
+        <div id="text"></div>
+        <br><br><div class="row" style="color: red;"><div class="col-md-4 text-center">Total price: </div><div class="col-md-4 text-center"></div><div class="col-md-4 text-center">{{price}}</div></div>
+        <div class="row" style="color: red;"><div class="col-md-4 text-center">Tax (10% on all items): </div><div class="col-md-4 text-center"></div><div class="col-md-4 text-center">{{tax}}</div></div>
+        <div class="row" style="color: red;"><div class="col-md-4 text-center">Total price including tax: </div><div class="col-md-4 text-center"></div><div class="col-md-4 text-center">{{totalprice}}</div></div>
+        <br><br><div>What would you like to do?</div>
+        <br><div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-3"><a type="button" class="btn btn-primary"href="/show_books">Continue shopping</a></div>
+            <div class="col-md-3"></div>            
+            <div class="col-md-3"><a type="button" class="btn btn-primary"href="/placeorder">Place order</a></div>
+        </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var book = {{ cartbooks | tojson }};  
+    var l = book.length;
+            var box = document.getElementById("text");
+            console.log(book.books);
+            box.innerHTML="";
+            box.innerHTML+='<div class="row" style="color: red"><div class="col-md-4 text-center">Bookname</div><div class="col-md-4 text-center">Quantity</div><div class="col-md-4 text-center">Price</div></div>';
+            for(var i=0;i<l-1;i++)
+            {
+                if(book[i][1]>0)
+                {
+                    box.innerHTML+='<div class="row"><div class="col-md-4 text-center">'+book[i][0]+'</div><div class="col-md-4 text-center">'+book[i][1]+'</div><div class="col-md-4 text-center">'+book[i][2]+'</div></div>';
+                }                
+            }
+
+</script>
+</html>

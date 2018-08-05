@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h4 style="margin-left:1000px">
+        <a href="{{url_for('signup')}}"><u>sign-up</u></a>
+</h4>
+<div class="jumbotron text-center">
+    <h1>Welcome to the book cart!</h1>
+    <p> Please login or signup to continue</p>
+</div>
+<span style="color: red">{{errormsg}}</span>
+<form method='POST' enctype='multipart/form-data' action="{{url_for('main')}}">
+    <div>Email:<br>
+        <input name="email" type="email" placeholder="Type your ID">
+    </div>
+    <br>
+    <div>Password:<br>
+        <input name="password" type="password"  placeholder="Enter password">
+    </div>
+    <br>
+    <div>
+        <br>
+        <input type="submit" value="Login">
+    </div>
+</form>
+{% endblock %}
+

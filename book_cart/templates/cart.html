@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BookCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Alegreya SC' rel='stylesheet'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    /* Modal Content */
+        .modal-content {
+            font-size: 15px;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>  
+    </head>
+    <body class="container" id="box" style="background-image: url('{{ url_for('static', filename='index.jpg')}}'); background-repeat: no-repeat; background-size: cover; font-family: 'Alegreya SC';">
+            {% include 'includes/_messages.html' %}
+    <div class="row">
+        <div class="col-md-4" style="position: fixed;">
+            <h3>All books</h3>
+            <ul class="list-group" id="leftrow" ></ul>
+        </div>
+        <div class="col-md-8" style="margin-left: 450px">
+                <h3 style="margin-left: 45%"><a type="button" onclick= openmodal("cart") class="btn btn-primary">Cart <span class="badge text-primary" style="background-color: floralwhite;">{{sum}}</span></a><div id="cart" class="modal"><div class="modal-content"><span style="margin-left: 950px" onclick= closemodal("cart")>&times;</span><p id="text"></p></div></div><a type="button" class="btn btn-info" onclick= openmodal("vieworder")>view-orders</a><div id="vieworder" class="modal"><div class="modal-content"><span style="margin-left: 950px" onclick= closemodal("vieworder")>&times;</span><p><form class = "text-center" method='POST' enctype='multipart/form-data' action="{{url_for('vieworders')}}"><div>Email:<br><input class = "text-center" name="name" type="text" placeholder="Enter your email"></div><br><div>Phone:<br>
+                        <input class = "text-center" name="phone" type="text"  placeholder="Enter phone number"></div><div><br><input class="btn btn-info" type="submit" value="Enter"></div></form></p></div></div><a type="button" class="btn btn-success text-center" href="/checkout">Checkout</a><a type="button" class="btn btn-danger"href="/">Logout</a></h3>
+                <ul class="list-group" id="rightrow"></ul>
+        </div>
+    </div>    
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var book = {{ cartbooks | tojson }}; 
+    var data = {{ books | tojson }};     
+    var body = document.getElementById("leftrow");
+    body.innerHTML="";
+    for(var i=0;i<data.length;i++)
+    {
+        var imid = "i"+i;
+        body.innerHTML+='<li class="list-group-item"><a href="#'+imid+'">'+data[i].volumeInfo.title+'</a></li>';
+    } 
+    var stage = document.getElementById("rightrow");
+    stage.innerHTML="";
+    for(var i=0;i<data.length;i++)
+    {
+        var ide="l"+i;
+        var imid = "i"+i;
+        stage.innerHTML+='<li class="list-group-item"><div class="row"><div class="col-md-4"><img id="'+imid+'" src= "'+data[i].volumeInfo.imageLinks.thumbnail+'"></div><div class="col-md-8" id="'+ide+'"><div>Title: '+data[i].volumeInfo.title+'</div><div>Publisher: '+data[i].volumeInfo.publisher+'</div></div></div></li>';
+        var thiselement = document.getElementById(""+ide+"");
+        if(data[i].saleInfo.listPrice)
+        {
+            thiselement.innerHTML+='price: INR '+data[i].saleInfo.listPrice.amount+'<br><br><a href="/addbook/'+data[i].volumeInfo.title+'"> Add to cart</a><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="/removebook/'+data[i].volumeInfo.title+'">Remove from cart</a>';                       
+        }
+        else
+        {
+            thiselement.innerHTML+='Not-for-sale';
+        }
+
+        var bid ="b"+i;
+        var mid ="m"+i;
+        thiselement.innerHTML+='<br><br><button id="'+bid+'" type = "button" class="btn btn-warning" onclick=openmodal("'+mid+'")>Book description</button><div id="'+mid+'" class="modal"> <div class="modal-content"><button style="margin-left: 1000px" onclick=closemodal("'+mid+'")>&times;</button><p>Book description:</p><p>'+data[i].volumeInfo.description+'</p></div></div>';     
+    }
+
+      function openmodal(id){
+        if(id=="cart")
+        {
+            var l = book.length;
+            var box = document.getElementById("text");
+            console.log(book.books);
+            box.innerHTML="";
+            box.innerHTML+='<div class="row" style="color: red"><div class="col-md-4 text-center">Bookname</div><div class="col-md-4 text-center">Quantity</div><div class="col-md-4 text-center">Price</div></div>';
+            for(var i=0;i<l;i++)
+            {
+                if(book[i][1]>0)
+                {
+                    box.innerHTML+='<div class="row"><div class="col-md-4 text-center">'+book[i][0]+'</div><div class="col-md-4 text-center">'+book[i][1]+'</div><div class="col-md-4 text-center">'+book[i][2]+'</div></div>';
+                }
+            }
+        }
+        var modal = document.getElementById(""+id+"");
+        modal.style.display = "block";
+    }
+
+    function closemodal(id)
+    {
+        var modal = document.getElementById(""+id+"");
+        modal.style.display = "none";
+    }
+
+    </script>
+</html>

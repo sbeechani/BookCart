@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BookCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Alegreya SC' rel='stylesheet'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">    
+    </head>
+    <body class="container" style="background-image: url('{{ url_for('static', filename='index.jpg')}}'); background-repeat: no-repeat; background-size: cover; font-family: 'Alegreya SC';">
+    <div class=row>
+        <div class="col-md-4" style="position: fixed;">
+         <h3>All books</h3>
+             <ul class="list-group">
+              {% for book in books %}
+             <li class="list-group-item">{{book["volumeInfo"]["title"]}}</li>
+             {% endfor %}
+         </ul>
+     </div>
+     <div class="col-md-8" style="margin-left: 450px">
+         <h3 style="margin-left: 400px">Cart| <a href="{{url_for('main')}}">sign-out| </a>Checkout</h3>
+             <ul class="list-group">
+                     {% for book in books %}
+                     	
+                         <div class="row">
+                             <div class="col-md-4">
+                                     <img src= {{book["volumeInfo"]["imageLinks"]["thumbnail"]}}>
+                             </div>
+                             <div class="col-md-8">   
+                                                                                    
+                                     <div>Title: {{book["volumeInfo"]["title"]}}</div>
+                                     <div>Author: {{book["volumeInfo"]["authors"][0]}}</div>
+                                     <div>Publisher: {{book["volumeInfo"]["publisher"]}}</div>
+                                     {% if book["saleInfo"]["listPrice"] %}
+                                     <div>{{book["saleInfo"]["listPrice"]["currencyCode"]}} {{book["saleInfo"]["listPrice"]["amount"]}}</div><br>
+                                     <a href="/addbook/{{book["volumeInfo"]["title"]}}"> Add to cart</a>
+                                     {% else %}
+                                     <div>Currently - unavailable</div>
+                                     {% endif %}                             
+                             </div>
+                         </div>
+                     </li><br>
+                     {% endfor %}
+                    </ul>
+            </div>
+        </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <script>src= "{{ url_for('static', filename='script.js')}}" </script> -->
+<script type="text/javascript">
+    var data = {{ books | tojson }}; 
+    
+    </script>
+</html>

@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h3>Please enter your details to register</h3><br>
+<form method='POST' enctype='multipart/form-data' action="{{url_for('signup')}}">
+    <div>User name:<br>
+        <input name="name" type="text" placeholder="Enter your name">
+    </div>
+    <br>
+    <span style="color: red">{{errormsg}}</span>
+    <div>Email:<br>
+        <input name="email" type="email" placeholder="Type your ID">
+    </div>
+    <br>
+    <div>Password:<br>
+        <input name="password" type="password"  placeholder="Enter password">
+    </div>
+    <br>
+    <div>Phone:<br>
+        <input name="phone" type="text"  placeholder="Enter phone number">
+    </div>
+    <br>
+    <div>
+        <br>
+        <input type="submit" value="Register">
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BookCart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Alegreya SC' rel='stylesheet'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">    
+    </head>
+<body class="container" style="background-image: url('{{ url_for('static', filename='index.jpg')}}'); background-repeat: no-repeat; background-size: cover; font-family: 'Alegreya SC';">
+        <h3>Email: {{email}}</h3>
+        <h3>Phone: {{phone}}</h3>
+        <h3 style="color:darkblue">Your order history:</h3>
+        <div id="text" style="font-weight: bold"></div> 
+        <div class="text-center"><a type="button" class="btn btn-primary"href="/show_books">Continue shopping</a></div>    
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var book = {{ cartbooks | tojson }};
+    console.log(book);
+    var l = book.length;
+
+            var box = document.getElementById("text");
+            box.innerHTML="";
+            box.innerHTML+='<div class="row" style="color: red"><div class="col-md-4 text-center">Bookname</div><div class="col-md-4 text-center">Quantity</div><div class="col-md-4 text-center">Price</div></div>';
+            for(var i=0;i<l;i++)
+            {
+                box.innerHTML+='<div class="text-center">orderid: oi-'+i+'</div>';
+                var k = book[i].length;
+                console.log(k)
+                for(var j=0;j<k;j++)
+                {
+                    if(book[i][j][1]>0 || book[i][j][1]=="")
+                    {                    
+                        box.innerHTML+='<div class="row"><div class="col-md-4 text-center">'+book[i][j][0]+'</div><div class="col-md-4 text-center">'+book[i][j][1]+'</div><div class="col-md-4 text-center">'+book[i][j][2]+'</div></div>';
+                    } 
+                } 
+                box.innerHTML+='<br><br>'                              
+            }
+
+</script>
+</html>

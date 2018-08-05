@@ -1,0 +1,11 @@
+ {% with messages = get_flashed_messages(with_categories=true) %} 
+ {% if messages %} 
+ {% for category, message in messages%}
+<!-- <div class="alert alert-{{ category }}">{{ message }}</div> -->
+<div class="alert alert-{{category}} alert-dismissible ">
+    <a href="/show_books" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error!</strong> {{message}}
+</div>
+{% endfor %} 
+{% endif %} 
+{% endwith %}
